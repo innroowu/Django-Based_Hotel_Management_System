@@ -1,24 +1,49 @@
-# Hotel-Room-Booking-System
+# Hotel_Management
+This repository is a project of Object-Oriented course using Python and Django
 
-<b>Features For Normal Users</b>
-<ul>
-  <li>Separate Login and Signup page</li>
-  <li> Can check Availability of Rooms for Specific date and Location</li>
-  <li>Can Book Rooms</li>
-  <li>Can see all their Bookings in the <b><i>"My Bookings"</i></b></li>
-</ul>
+## Feature
++ User / staff login 
++ User signup
++ Add hotel / location
++ Edit / view hotels
++ Search
++ Hotel reservation
++ Delete / view reservation detail
++ Extra facilities
++ User / staff chat
++ Customer reviews
+  
+## Setup
+1. Clone the repository
+   
+2. Install Django
 
-<b>Features For Staff User</b>
-<ul>
-  <li>Separate Login and Signup page</li>
-  <li> Can check Availability of Rooms for Specific date and Location</li>
-  <li>Can Book Rooms</li>
-  <li>See the stats of the Rooms in the <b><i>"Dashboard"<i></b></li>
-  <li>Can see the Bookings of all the Users </li>
-  <li>Can See/Modify the details of the rooms</li>
-  <li>Can Add New Rooms</li>
-  <li>Can Add New Location</li>
-</ul>
-<b>See the Demonstration of this project</b><br/>
-<a href="http://www.youtube.com/watch?v=XhydAiCgToA">http://www.youtube.com/watch?v=XhydAiCgToA</a>
+3. Database migration
+    ```
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+4. Run server
+    ```
+    python manage.py runserver 127.0.0.1:8000
+    ```
 
+5. After execution, if the database has not created the corresponding table ( eg. no such table: room_room )
+   
+   (OPTIONAL) Check which migration files have been applied  
+    ```
+    python manage.py showmigrations
+    ```
+   Make sure there is a valid model definition in the application in model.py. Then, create a new migration file.
+    ```
+    # python manage.py makemigrations <model_name>
+    python manage.py makemigrations room
+    python manage.py migrate
+    ```
+    Execute run server again
+    
+    
+## Configuration
++ Make sure the 'STATIC_URL' in <setting.py> points to the valid directory containing your static files, such as images, CSS stylesheets, JavaScript files, etc.
+
++ DATABASES in <setting.py> must also direct to the correct db.sqlite3 file
