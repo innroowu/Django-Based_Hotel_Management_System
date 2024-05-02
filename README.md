@@ -1,4 +1,4 @@
-# Hotel_Manage_System_Using_Django
+# Django-Based Hotel Management System
 This repository is a project of Object-Oriented course using Python and Django
 
 ## Feature
