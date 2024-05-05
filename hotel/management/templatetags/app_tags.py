@@ -23,5 +23,6 @@ def get_current_date():
 
 @register.filter
 def percentage(value1,value2=100):
-    
+    if value2 == 0:
+        return 0
     return int(value1)/int(value2)*100
