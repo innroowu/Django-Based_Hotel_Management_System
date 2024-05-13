@@ -339,5 +339,54 @@ def all_bookings(request):
     return HttpResponse(render(request,'staff/allbookings.html',{'bookings':bookings}))
     
 
-
+def sales(request, this_total = 0, last_total = 0, context = {}):
+    this_month = datetime.date.today().month
+    this_year = datetime.date.today().year
+    last_month = this_month - 1
+    last_year = this_year
+    if last_month < 1:
+        last_month = 12
+        last_year -= 1
+    
+    
+    try:
+        this_sales = Reservation.objects.filter( check_in__month = this_month ).filter( check_in__year = this_year )
+        last_sales = Reservation.objects.filter( check_in__month = last_month ).filter( check_in__year = last_year )
         
+        for sale in this_sales:
+            this_total += sale.room.price
+
+        for sale in last_sales:
+            last += sale.room.price
+
+        hotels = Hotels.objects.all()
+        label = []
+        datapoints_1 = []
+        for hotel in hotels:
+            label.append( hotel.location )
+            data = {}
+            sum_location = Reservation.objects.filter( room__hotel__location = hotel.location )
+            sum  = 0
+            for item in sum_location:
+                sum += item.room.price
+            data['y'] = sum 
+            data['label'] = hotel.location 
+            datapoints_1.append( data )
+
+        context = {
+            'this_total': this_total,
+            'last_total': last_total,
+            'this_sales':this_sales,
+            'last_sales':last_sales,
+            'hotels': hotels,
+            'label': label,
+            'datapoints_1': datapoints_1,
+        }
+
+    except:
+        pass
+
+    return render(request,'staff/sales.html',context)
+
+
+
