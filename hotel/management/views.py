@@ -328,7 +328,21 @@ def add_new_location(request):
 
     else:
         return HttpResponse("Not Allowed")
-    
+
+@login_required(login_url='/user')
+def delete_booking(request, booking_id):
+    if request.method == 'POST':
+        try:
+            booking = Reservation.objects.get(id=booking_id)
+            # Add any permission checks here to ensure the user can delete this booking
+            booking.delete()
+            messages.success(request, "Booking has been successfully deleted.")
+        except Reservation.DoesNotExist:
+            messages.error(request, "Booking does not exist.")
+        except Exception as e:
+            messages.error(request, f"An error occurred while deleting the booking: {str(e)}")
+    return redirect('dashboard')   
+
 #for showing all bookings to staff
 @login_required(login_url='/staff')
 def all_bookings(request):
