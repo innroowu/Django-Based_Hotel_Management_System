@@ -10,6 +10,7 @@
         <th>Check in</th>
         <th>Check out</th>
         <th>Price</th>
+        <th>Actions</th>
     </thead>
     {% for each_booking in bookings %}
     <tr>
@@ -20,6 +21,12 @@
         <td>{{each_booking.check_in}}</td>
         <td>{{each_booking.check_out}}</td>
         <td>{{each_booking.room.price}}</td>
+        <td>
+            <form method="post" action="{% url 'delete_booking' each_booking.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
 
