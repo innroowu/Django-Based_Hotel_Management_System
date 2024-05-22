@@ -8,6 +8,26 @@ from django.contrib.auth.decorators import login_required
 import datetime
 # Create your views here.
 
+@login_required(login_url='/user')
+def rate_booking(request, booking_id):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        #booking_id = request.POST.get('booking_id')
+        try:
+            booking = Reservation.objects.get(id=booking_id)
+            # 確保評分在合理範圍內並且訂單尚未評分
+            if 1 <= int(rating) <= 5 and booking.rating is None:
+                booking.rating = rating
+                booking.save()
+                messages.success(request, "Thank you for your rating!")
+            else:
+                messages.warning(request, "Invalid rating or booking already rated.")
+        except Reservation.DoesNotExist:
+            messages.error(request, "Booking does not exist.")
+        return redirect('dashboard')
+    return HttpResponse("Invalid request", status=400)
+
+
 #homepage
 def homepage(request):
     all_location = Hotels.objects.values_list('location','id').distinct().order_by()
@@ -371,7 +391,7 @@ def sales(request, this_total = 0, last_total = 0, context = {}):
             this_total += sale.room.price
 
         for sale in last_sales:
-            last += sale.room.price
+            last_total += sale.room.price
 
         hotels = Hotels.objects.all()
         label = []

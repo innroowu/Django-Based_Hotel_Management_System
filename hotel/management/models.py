@@ -43,6 +43,7 @@ class Reservation(models.Model):
     guest = models.ForeignKey(User, on_delete= models.CASCADE)
     
     booking_id = models.CharField(max_length=100,default="null")
+    rating = models.IntegerField(null=True, blank=True)  # 允許空值並在表單中可選
     def __str__(self):
         return self.guest.username
 

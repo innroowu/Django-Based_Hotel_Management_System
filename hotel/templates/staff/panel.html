@@ -216,6 +216,7 @@
         <th>Capacity</th>
         <th>Size</th>
         <th colspan="2">Actions</th>
+        <th>Average Rating</th> <!-- 新增平均評分列 -->
 
     </thead>
     {% if rooms %} {% for each_room in rooms %}
@@ -230,7 +231,17 @@
             <a href="/staff/panel/edit-room?roomid={{each_room.id}}"><Button class="btn btn-danger">Edit</Button></a>
             <a href="/staff/panel/view-room?roomid={{each_room.id}}"><Button class="btn btn-primary">View</Button></a>
         </td>
-
+        <td>
+            {% with reservations=each_room.reservation_set.all %}
+                {% with avg_rating=reservations|average_rating %}
+                    {% if avg_rating %}
+                        {{ avg_rating|floatformat:2 }} Stars
+                    {% else %}
+                        No Ratings
+                    {% endif %}
+                {% endwith %}
+            {% endwith %}
+        </td>
 
     </tr>
     {% endfor %} {% endif %}

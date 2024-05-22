@@ -36,6 +36,8 @@ urlpatterns = [
     path('staff/sales', views.sales,name="sales"),
     path('user/bookings/delete_booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
 
+    path('user/rate_booking/<int:booking_id>/', views.rate_booking, name='rate_booking'),
+
     path('staff/panel/add-new-location', views.add_new_location,name="addnewlocation"),
     path('staff/panel/edit-room', views.edit_room),
     path('staff/panel/add-new-room', views.add_new_room,name="addroom"),

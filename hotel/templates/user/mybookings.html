@@ -1,5 +1,6 @@
 {% extends 'basic.html' %} {% block title %}Dashboard {% endblock title %} {% block body %}
 {% load app_tags %}
+{% now "m-d-Y" as today %}
 <h3 class="text-center  text-success">My Bookings </h3>
 <table class="table">
     <thead>
@@ -11,6 +12,7 @@
         <th>Check out</th>
         <th>Price</th>
         <th>Actions</th>
+        <th>Rating</th>  <!-- 新增評分列標題 -->
     </thead>
     {% for each_booking in bookings %}
     <tr>
@@ -18,14 +20,37 @@
         <td>{{each_booking.room.roomnumber}}</td>
         <td>{{each_booking.room.hotel.location}}</td>
         <td>{{each_booking.room.capacity}}</td>
-        <td>{{each_booking.check_in}}</td>
-        <td>{{each_booking.check_out}}</td>
+        <td>{{each_booking.check_in|date:"m-d-Y"}}</td>
+        <td>{{each_booking.check_out|date:"m-d-Y"}}</td>
         <td>{{each_booking.room.price}}</td>
         <td>
             <form method="post" action="{% url 'delete_booking' each_booking.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
+        </td>
+        <td>
+            {% if each_booking.check_out|date:"m-d-Y" < today %}
+                {% if each_booking.rating %}
+                    Rated: {{ each_booking.rating }} stars
+                {% else %}    
+                <form method="post" action="{% url 'rate_booking' each_booking.id %}">
+                    {% csrf_token %}
+                    <select name="rating">
+                        <option value="">Rate...</option>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="5">5 Stars</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                {% endif %}
+            {% else %}
+                Not available for rating
+            {% endif %}  
+             
         </td>
     </tr>
     {% endfor %}
