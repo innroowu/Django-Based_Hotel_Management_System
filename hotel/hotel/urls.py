@@ -33,9 +33,10 @@ urlpatterns = [
     path('logout', views.logoutuser,name="logout"),
     path('staff/panel', views.panel,name="staffpanel"),
     path('staff/allbookings', views.all_bookings,name="allbookigs"),
+    path('staff/allbookings/chat-box/<int:reservation_id>/', views.staff_chat_box, name="staff_chat_box"),
     path('staff/sales', views.sales,name="sales"),
     path('user/bookings/delete_booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
-
+    path('user/bookings/chat-box/<int:reservation_id>/', views.chat_box, name='chat_box'),
     path('user/rate_booking/<int:booking_id>/', views.rate_booking, name='rate_booking'),
 
     path('staff/panel/add-new-location', views.add_new_location,name="addnewlocation"),
