@@ -1,4 +1,4 @@
-{% extends 'basic.html' %} {% block title %} staff panel {% endblock title %} {% block css %}
+{% extends 'basic.html' %} {% block title %} sales {% endblock title %} {% block css %}
 {% load static %}
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
@@ -263,7 +263,7 @@ body {
             <p class="text-primary">Rating ( this month )</p>
             <span class="material-icons-outlined text-orange">star</span>
           </div>
-          <span class="text-primary font-weight-bold">4.5</span>
+          <span class="text-primary font-weight-bold">{{ this_rate }}</span>
         </div>
 
         <div class="card">
@@ -279,7 +279,7 @@ body {
             <p class="text-primary">Rating ( last month )</p>
             <span class="material-icons-outlined text-red">star</span>
           </div>
-          <span class="text-primary font-weight-bold">4.3</span>
+          <span class="text-primary font-weight-bold">{{ last_rate }}</span>
         </div>
 
       </div>
@@ -312,5 +312,5 @@ body {
   }
 </script>    
 
-<!--Jquery for room stats ends here{{ datapoints_1|safe }}-->
+<!-- Jquery for room stats ends here{{ datapoints_1|safe }} -->
 {% endblock js %}
