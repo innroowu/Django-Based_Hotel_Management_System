@@ -374,7 +374,7 @@ def all_bookings(request):
     return HttpResponse(render(request,'staff/allbookings.html',{'bookings':bookings}))
     
 
-def sales(request, this_total = 0, last_total = 0, context = {}):
+def sales(request, this_total = 0, last_total = 0, this_rate = 0, last_rate = 0, context = {}):
     this_month = datetime.date.today().month
     this_year = datetime.date.today().year
     last_month = this_month - 1
@@ -393,6 +393,22 @@ def sales(request, this_total = 0, last_total = 0, context = {}):
 
         for sale in last_sales:
             last_total += sale.room.price
+
+        this_count = 0
+        this_rate_sum = 0
+        for sale in this_sales:
+            if( sale.rating ):
+                this_rate_sum += sale.rating
+                this_count += 1
+        this_rate = this_rate_sum / this_count
+
+        last_count = 0
+        last_rate_sum = 0
+        for sale in last_sales:
+            if( sale.rating ):
+                last_rate_sum += sale.rating
+                last_count += 1
+        last_rate = last_rate_sum / last_count
 
         hotels = Hotels.objects.all()
         label = []
@@ -413,6 +429,8 @@ def sales(request, this_total = 0, last_total = 0, context = {}):
             'last_total': last_total,
             'this_sales':this_sales,
             'last_sales':last_sales,
+            'this_rate':this_rate,
+            'last_rate':last_rate,
             'hotels': hotels,
             'label': label,
             'datapoints_1': datapoints_1,
