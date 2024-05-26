@@ -12,6 +12,7 @@
         <th>Check out</th>
         <th>Price</th>
         <th>Actions</th>
+        <th>Facilities</th>
         <th>Rating</th>  <!-- 新增評分列標題 -->
     </thead>
     {% for each_booking in bookings %}
@@ -28,6 +29,27 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
+        </td>
+        <td>
+        <!-- 不太確定為什麼facilities的數字和判斷標準對不上，暫時先這樣，再找機會修改 -->
+            {% if each_booking.facilities %}
+                <!-- {{each_booking.facilities}} -->
+                {% if each_booking.facilities == 1 %}
+                    Gym
+                {% else %}
+                    Swimming Pool
+                {% endif %}
+            {% else %}
+            <form method="post" action="{% url 'facilities' each_booking.id %}">
+                {% csrf_token %}
+                <select name="facilities">
+                    <option value="">Choose...</option>
+                    <option value="1">Swimming Pool</option>
+                    <option value="2">Gym</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {% endif %}
         </td>
         <td>
             {% if each_booking.check_out|date:"m-d-Y" < today %}

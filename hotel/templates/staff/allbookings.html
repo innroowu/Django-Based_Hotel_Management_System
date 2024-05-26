@@ -12,6 +12,7 @@
         <th>Check in</th>
         <th>Check out</th>
         <th>Price</th>
+        <th>Facilities</th>
         <th>Rating</th>
     </thead>
     {% for each_booking in bookings %}
@@ -23,6 +24,17 @@
         <td>{{each_booking.check_in}}</td>
         <td>{{each_booking.check_out}}</td>
         <td>{{each_booking.room.price}}</td>
+        <td>
+            {% if each_booking.facilities %}
+                {% if each_booking.facilities == 1 %}
+                    Gym
+                {% else %}
+                    Swimming Pool
+                {% endif %}
+            {% else %}
+                No reservation
+            {% endif %}
+        </td>
         <td>{{each_booking.rating|default:"Not Rated" }}</td>
     </tr>
     {% endfor %}

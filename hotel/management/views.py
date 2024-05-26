@@ -9,6 +9,23 @@ import datetime
 # Create your views here.
 
 @login_required(login_url='/user')
+def book_facilities(request, booking_id):
+    if request.method == 'POST':
+        facilities = request.POST.get('facilities')
+        try:
+            booking = Reservation.objects.get(id=booking_id)
+            if 1 <= int(facilities) <= 2 and booking.facilities is None:
+                booking.facilities = facilities
+                booking.save()
+                messages.success(request, "Successfully add request.")
+            else:
+                messages.warning(request, "Invalid reservation.")
+        except Reservation.DoesNotExist:
+            messages.error(request, "Booking does not exist")
+        return redirect('dashboard')
+    return HttpResponse("Invalid Request",status=400)
+
+@login_required(login_url='/user')
 def rate_booking(request, booking_id):
     if request.method == 'POST':
         rating = request.POST.get('rating')

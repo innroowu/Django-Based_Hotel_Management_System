@@ -37,6 +37,7 @@ urlpatterns = [
     path('user/bookings/delete_booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
 
     path('user/rate_booking/<int:booking_id>/', views.rate_booking, name='rate_booking'),
+    path('user/facilities/<int:booking_id>/',views.book_facilities,name='facilities'),
 
     path('staff/panel/add-new-location', views.add_new_location,name="addnewlocation"),
     path('staff/panel/edit-room', views.edit_room),
