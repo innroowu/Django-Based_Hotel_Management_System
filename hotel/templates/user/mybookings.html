@@ -31,13 +31,12 @@
             </form>
         </td>
         <td>
-        <!-- 不太確定為什麼facilities的數字和判斷標準對不上，暫時先這樣，再找機會修改 -->
             {% if each_booking.facilities %}
                 <!-- {{each_booking.facilities}} -->
                 {% if each_booking.facilities == 1 %}
-                    Gym
-                {% else %}
                     Swimming Pool
+                {% else %}
+                    Gym
                 {% endif %}
             {% else %}
             <form method="post" action="{% url 'facilities' each_booking.id %}">
