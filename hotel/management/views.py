@@ -1,6 +1,10 @@
 from django.shortcuts import render ,redirect, get_object_or_404
 from django.http import HttpResponse , HttpResponseRedirect
+<<<<<<< HEAD
 from .models import Hotels,Rooms,Reservation, Chats
+=======
+from .models import Hotels,Rooms,Reservation,SaleReport
+>>>>>>> 15651393f88f6c64470ceb0f178d6b77a1d8fa7c
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
@@ -374,72 +378,11 @@ def all_bookings(request):
     return HttpResponse(render(request,'staff/allbookings.html',{'bookings':bookings}))
     
 
-def sales(request, this_total = 0, last_total = 0, this_rate = 0, last_rate = 0, context = {}):
-    this_month = datetime.date.today().month
-    this_year = datetime.date.today().year
-    last_month = this_month - 1
-    last_year = this_year
-    if last_month < 1:
-        last_month = 12
-        last_year -= 1
-    
-    
-    try:
-        this_sales = Reservation.objects.filter( check_in__month = this_month ).filter( check_in__year = this_year )
-        last_sales = Reservation.objects.filter( check_in__month = last_month ).filter( check_in__year = last_year )
-        
-        for sale in this_sales:
-            this_total += sale.room.price
 
-        for sale in last_sales:
-            last_total += sale.room.price
-
-        this_count = 0
-        this_rate_sum = 0
-        for sale in this_sales:
-            if( sale.rating ):
-                this_rate_sum += sale.rating
-                this_count += 1
-        this_rate = this_rate_sum / this_count
-
-        last_count = 0
-        last_rate_sum = 0
-        for sale in last_sales:
-            if( sale.rating ):
-                last_rate_sum += sale.rating
-                last_count += 1
-        last_rate = last_rate_sum / last_count
-
-        hotels = Hotels.objects.all()
-        label = []
-        datapoints_1 = []
-        for hotel in hotels:
-            label.append( hotel.location )
-            data = {}
-            sum_location = Reservation.objects.filter( room__hotel__location = hotel.location )
-            sum  = 0
-            for item in sum_location:
-                sum += item.room.price
-            data['y'] = sum 
-            data['label'] = hotel.location 
-            datapoints_1.append( data )
-
-        context = {
-            'this_total': this_total,
-            'last_total': last_total,
-            'this_sales':this_sales,
-            'last_sales':last_sales,
-            'this_rate':this_rate,
-            'last_rate':last_rate,
-            'hotels': hotels,
-            'label': label,
-            'datapoints_1': datapoints_1,
-        }
-
-    except:
-        pass
-
+def sales(request, context = {}):
+    context = SaleReport().get_context()
     return render(request,'staff/sales.html',context)
+<<<<<<< HEAD
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -485,3 +428,5 @@ def staff_chat_box(request, reservation_id):
 
     chats_list = reservation.messages.all()
     return render(request, 'staff/chat.html', {'reservation': reservation, 'chats': chats_list})
+=======
+>>>>>>> 15651393f88f6c64470ceb0f178d6b77a1d8fa7c
