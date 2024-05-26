@@ -12,6 +12,7 @@
         <th>Check in</th>
         <th>Check out</th>
         <th>Price</th>
+        <th>Extra Facilities</th>
         <th>Rating</th>
         <th>Action</th>
     </thead>
@@ -24,6 +25,15 @@
         <td>{{each_booking.check_in}}</td>
         <td>{{each_booking.check_out}}</td>
         <td>{{each_booking.room.price}}</td>
+        <td>
+            {% if each_booking.facilities == 1 %}
+                    Swimming Pool
+            {% elif each_booking.facilities == 2 %}
+                    Gym
+            {% else %}
+                No Reservation
+            {% endif %}
+        </td>
         <td>{{each_booking.rating|default:"Not Rated" }}</td>
         <td>
             <a href="{% url 'chat_box' each_booking.id %}">

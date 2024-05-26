@@ -8,6 +8,22 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.utils import timezone
 # Create your views here.
+@login_required(login_url='/user')
+def book_facilities(request,booking_id):
+    if request.method == 'POST':
+        facilities = request.POST.get('facilities')
+        try:
+            booking = Reservation.objects.get(id=booking_id)
+            if 1 <= int(facilities) <= 2 and booking.facilities is None:
+                booking.facilities = facilities
+                booking.save()
+                messages.success(request, "Successfully reserved facilities.")
+            else:
+                messages.warning(request, "Invalid reservation.")
+        except Reservation.DoesNotExist:
+            messages.warning(request, "Booking does not exist.")
+        return redirect('dashboard')
+    return HttpResponse("Invalid request", status=400)
 
 @login_required(login_url='/user')
 def rate_booking(request, booking_id):
