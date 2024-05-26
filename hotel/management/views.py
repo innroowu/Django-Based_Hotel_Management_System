@@ -1,11 +1,12 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render ,redirect, get_object_or_404
 from django.http import HttpResponse , HttpResponseRedirect
-from .models import Hotels,Rooms,Reservation,SaleReport
+from .models import Hotels,Rooms,Reservation,Chats,SaleReport
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.utils import timezone
 # Create your views here.
 
 @login_required(login_url='/user')
@@ -377,3 +378,50 @@ def all_bookings(request):
 def sales(request, context = {}):
     context = SaleReport().get_context()
     return render(request,'staff/sales.html',context)
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Reservation
+
+
+def chat_box(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+
+    if request.method == 'POST':
+        msg_content = request.POST.get('msg_content')
+        if msg_content:
+            new_msg = Chats(
+                content=msg_content,
+                reservation=reservation,
+                sender=request.user,
+                timestamp=timezone.now()
+            )
+            new_msg.save()
+            messages.success(request, 'Message submitted successfully!')
+        return redirect('chat_box', reservation_id=reservation_id)  # Redirect back to the chat box
+
+    chats_list = reservation.messages.all()
+    return render(request, 'user/chat.html', {'reservation': reservation, 'chats': chats_list})
+
+
+@login_required(login_url='/staff')
+def staff_chat_box(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+
+    if request.method == 'POST':
+        msg_content = request.POST.get('msg_content')
+        if msg_content:
+            new_msg = Chats(
+                content=msg_content,
+                reservation=reservation,
+                sender=request.user,
+                timestamp=timezone.now()
+            )
+            new_msg.save()
+            messages.success(request, 'Message submitted successfully!')
+        return redirect('staff_chat_box', reservation_id=reservation_id)
+
+    chats_list = reservation.messages.all()
+    return render(request, 'staff/chat.html', {'reservation': reservation, 'chats': chats_list})
+

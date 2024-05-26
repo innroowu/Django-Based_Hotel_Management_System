@@ -13,6 +13,7 @@
         <th>Check out</th>
         <th>Price</th>
         <th>Rating</th>
+        <th>Action</th>
     </thead>
     {% for each_booking in bookings %}
     <tr>
@@ -24,6 +25,11 @@
         <td>{{each_booking.check_out}}</td>
         <td>{{each_booking.room.price}}</td>
         <td>{{each_booking.rating|default:"Not Rated" }}</td>
+        <td>
+            <a href="{% url 'chat_box' each_booking.id %}">
+                <button class="btn btn-primary">Message</button>
+            </a>
+        </td>
     </tr>
     {% endfor %}
 
