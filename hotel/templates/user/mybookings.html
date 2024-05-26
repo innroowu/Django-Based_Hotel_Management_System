@@ -11,8 +11,8 @@
         <th>Check in</th>
         <th>Check out</th>
         <th>Price</th>
-        <th>Actions</th>
         <th>Rating</th>  <!-- 新增評分列標題 -->
+        <th colspan="2">Actions</th>
     </thead>
     {% for each_booking in bookings %}
     <tr>
@@ -23,12 +23,6 @@
         <td>{{each_booking.check_in|date:"m-d-Y"}}</td>
         <td>{{each_booking.check_out|date:"m-d-Y"}}</td>
         <td>{{each_booking.room.price}}</td>
-        <td>
-            <form method="post" action="{% url 'delete_booking' each_booking.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </td>
         <td>
             {% if each_booking.check_out|date:"m-d-Y" < today %}
                 {% if each_booking.rating %}
@@ -51,6 +45,19 @@
                 Not available for rating
             {% endif %}  
              
+        </td>
+        <td>
+            <div class="d-flex">
+                <div class="mr-2">
+                    <a href="{% url 'chat_box' each_booking.id %}" class="btn btn-primary">Message</a>
+                </div>
+                <div>
+                    <form method="post" action="{% url 'delete_booking' each_booking.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
         </td>
     </tr>
     {% endfor %}
