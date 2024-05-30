@@ -1,6 +1,29 @@
 {% extends 'basic.html' %}
-{% block title %}about
-{% endblock title %}
+
+{% block title %}About{% endblock title %}
+
 {% block body %}
-<h1 class="text-center text-success">About page </h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h2 class="text-center mt-5 mb-4">About</h2>
+            <p>歡迎來到我們的網頁飯店訂購系統！本專案是基於 Django 框架開發的，旨在提供使用者預訂飯店服務以及方便的飯店管理功能。我們致力於為您提供無縫的訂購體驗和完善的管理解決方案。</p>
+            <h3 class="mt-5">核心功能</h3>
+            <ul>
+                <li><strong>用戶登入和註冊：</strong> 使用者和飯店管理人員可以輕鬆註冊和登入帳戶，以訪問系統的所有功能。</li>
+                <li><strong>飯店管理：</strong> 管理員可以新增、編輯和刪除飯店資訊，包括房間類型、價格和可用性等。</li>
+                <li><strong>飯店搜尋：</strong> 使用者可以通過搜尋功能找到符合其需求的飯店，並查看相關資訊。</li>
+                <li><strong>飯店預訂：</strong> 使用者可以預訂喜歡的飯店房間，並選擇入住和退房日期。</li>
+                <li><strong>訂單管理：</strong> 使用者和管理員可以查看和管理訂單，包括取消訂單和修改訂單資訊。</li>
+                <li><strong>額外設施預約：</strong> 使用者可以預訂飯店提供的額外服務和設施，如早餐、接送服務等。</li>
+                <li><strong>QA 交流：</strong> 使用者和管理員之間可以進行問答交流，解決疑問和提供幫助。</li>
+                <li><strong>評價和評分：</strong> 使用者可以對飯店和服務進行評價和評分，幫助其他用戶做出更好的選擇。</li>
+                <li><strong>業績報表：</strong> 管理員可以查看飯店的業績報表和統計信息，以幫助做出更明智的決策。</li>
+            </ul>
+            <h3 class="mt-5">響應式設計</h3>
+            <p>我們的網頁設計採用了響應式設計，確保無論您使用的是桌面電腦、平板還是手機，都能享受到流暢的使用體驗。這意味著您可以隨時隨地訪問我們的系統，輕鬆預訂飯店房間並管理您的訂單。</p>
+            <p>我們致力於提供最優質的服務和最便捷的使用體驗，希望您喜歡使用我們的網頁飯店訂購系統！</p>
+        </div>
+    </div>
+</div>
 {% endblock body %}
