@@ -45,6 +45,7 @@ class Reservation(models.Model):
     
     booking_id = models.CharField(max_length=100,default="null")
     rating = models.IntegerField(null=True, blank=True)  # 允許空值並在表單中可選
+    facilities = models.IntegerField(null=True,blank=True)
 
     # message = models.TextField(blank=True, null=True)
     def __str__(self):
