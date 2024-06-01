@@ -61,7 +61,10 @@ class Chats(models.Model):
         return f'{self.sender.username} - {self.timestamp}'
 
 
-class SaleReport(models.Model):
+
+
+
+class SaleReport():
     def __init__(self):
         self.__this_month = datetime.date.today().month
         self.__this_year = datetime.date.today().year
@@ -105,21 +108,25 @@ class SaleReport(models.Model):
     def __get_this_rate(self):
         this_count = 0
         this_rate_sum = 0
+        this_rate = 0
         for sale in self.__this_sales:
             if( sale.rating ):
                 this_rate_sum += sale.rating
                 this_count += 1
-        this_rate = this_rate_sum / this_count
+        if this_count:
+            this_rate = this_rate_sum / this_count
         return this_rate
 
     def __get_last_rate(self):
         last_count = 0
         last_rate_sum = 0
+        last_rate = 0
         for sale in self.__last_sales:
             if( sale.rating ):
                 last_rate_sum += sale.rating
                 last_count += 1
-        last_rate = last_rate_sum / last_count
+        if last_count:
+            last_rate = last_rate_sum / last_count
         return last_rate
 
 
