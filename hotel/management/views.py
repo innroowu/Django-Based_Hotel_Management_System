@@ -1,6 +1,6 @@
 from django.shortcuts import render ,redirect, get_object_or_404
 from django.http import HttpResponse , HttpResponseRedirect
-from .models import Hotels,Rooms,Reservation,Chats,SaleReport
+from .models import Hotels,Rooms,Reservation,Chats,SaleReport,ReservationManage, HotelManage, SearchRoom
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
@@ -47,23 +47,12 @@ def rate_booking(request, booking_id):
 
 #homepage
 def homepage(request):
-    all_location = Hotels.objects.values_list('location','id').distinct().order_by()
+    all_location = HotelManage.get_all_location()
     if request.method =="POST":
         try:
             print(request.POST)
-            hotel = Hotels.objects.all().get(id=int(request.POST['search_location']))
-            rr = []
-            
-            #for finding the reserved rooms on this time period for excluding from the query set
-            for each_reservation in Reservation.objects.all():
-                if str(each_reservation.check_in) < str(request.POST['cin']) and str(each_reservation.check_out) < str(request.POST['cout']):
-                    pass
-                elif str(each_reservation.check_in) > str(request.POST['cin']) and str(each_reservation.check_out) > str(request.POST['cout']):
-                    pass
-                else:
-                    rr.append(each_reservation.room.id)
-                
-            room = Rooms.objects.all().filter(hotel=hotel,capacity__gte = int(request.POST['capacity'])).exclude(id__in=rr)
+            room = SearchRoom( int(request.POST['search_location']),request.POST['cin'],request.POST['cout'],request.POST['capacity'] ).search_room_in_range()
+
             if len(room) == 0:
                 messages.warning(request,"Sorry No Rooms Are Available on this time period")
             data = {'rooms':room,'all_location':all_location,'flag':True}
@@ -72,10 +61,7 @@ def homepage(request):
             messages.error(request,e)
             response = render(request,'index.html',{'all_location':all_location})
 
-
     else:
-        
-        
         data = {'all_location':all_location}
         response = render(request,'index.html',data)
     return HttpResponse(response)
@@ -349,17 +335,12 @@ def add_new_location(request):
         state = request.POST['new_state']
         country = request.POST['new_country']
         
-        hotels = Hotels.objects.all().filter(location = location , state = state)
+        hotels = HotelManage.get_by_location_state(location, state)
         if hotels:
             messages.warning(request,"Sorry City at this Location already exist")
             return redirect("staffpanel")
         else:
-            new_hotel = Hotels()
-            new_hotel.owner = owner
-            new_hotel.location = location
-            new_hotel.state = state
-            new_hotel.country = country
-            new_hotel.save()
+            HotelManage.add_hotel(owner, location, state, country)
             messages.success(request,"New Location Has been Added Successfully")
             return redirect("staffpanel")
 
@@ -383,13 +364,11 @@ def delete_booking(request, booking_id):
 #for showing all bookings to staff
 @login_required(login_url='/staff')
 def all_bookings(request):
-   
-    bookings = Reservation.objects.all()
+    bookings = ReservationManage.get_all_reserv()
     if not bookings:
         messages.warning(request,"No Bookings Found")
     return HttpResponse(render(request,'staff/allbookings.html',{'bookings':bookings}))
     
-
 
 def sales(request, context = {}):
     context = SaleReport().get_context()
