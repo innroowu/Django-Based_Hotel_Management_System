@@ -36,6 +36,7 @@ class Rooms(models.Model):
     def __str__(self):
         return self.hotel.name
 
+
 class Reservation(models.Model):
 
     check_in = models.DateField(auto_now =False)
@@ -51,6 +52,7 @@ class Reservation(models.Model):
     def __str__(self):
         return self.guest.username
 
+
 class Chats(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
@@ -61,15 +63,82 @@ class Chats(models.Model):
         return f'{self.sender.username} - {self.timestamp}'
 
 
-class SaleReport(models.Model):
+class HotelManage():
+    def add_hotel(owner, location, state, country):
+        new_hotel = Hotels()
+        new_hotel.owner = owner
+        new_hotel.location = location
+        new_hotel.state = state
+        new_hotel.country = country
+        new_hotel.save()        
+
+    def get_all_hotel():
+        hotels = Hotels.objects.all()
+        return hotels
+
+    def get_by_id( idx ):
+        hotels = Hotels.objects.all().get(id=idx)
+        return hotels
+
+    def get_by_location_state( location, state ):
+        hotels = Hotels.objects.all().filter(location = location , state = state)
+        return hotels
+
+    def get_all_location():
+        locations = Hotels.objects.values_list('location','id').distinct().order_by()
+        return locations
+
+
+class ReservationManage():
+    def get_all_reserv():
+        reservations = Reservation.objects.all()
+        return reservations
+
+    def get_resev_by_id( id ):
+        reservations = Reservation.objects.get( id=booking_id )
+        return reservations
+
+    def get_reserv_in_range( start, end ):
+        reservations = Reservation.objects.filter( check_in__month = start ).filter( check_in__year = end )
+        return reservations
+
+    def get_reserv_by_location( location ):
+        reservations =  Reservation.objects.filter( room__hotel__location = location )
+        return reservations
+
+
+class SearchRoom():
+    def __init__( self, id, start, out, capacity ):
+        self.__all_reservations = ReservationManage.get_all_reserv()
+        self.__id = id
+        self.__start = start
+        self.__out = out
+        self.__capacity = capacity
+
+    def search_room_in_range( self ):
+        hotel = HotelManage.get_by_id( self.__id )
+        rr = []
+        for reservation in self.__all_reservations:
+            if str(reservation.check_in) < str(self.__start) and str(reservation.check_out) < str(self.__out):
+                pass
+            elif str(reservation.check_in) > str(self.__start) and str(reservation.check_out) > str(self.__out):
+                pass
+            else:
+                rr.append(reservation.room.id)
+        
+        room = Rooms.objects.all().filter(hotel=hotel,capacity__gte = int(self.__capacity)).exclude(id__in=rr)
+        return room
+
+
+class SaleReport():
     def __init__(self):
         self.__this_month = datetime.date.today().month
         self.__this_year = datetime.date.today().year
         self.__last_month = self.__get_last_mon()
         self.__last_year = self.__get_last_year()
-        self.__this_sales = Reservation.objects.filter( check_in__month = self.__this_month ).filter( check_in__year = self.__this_year )
-        self.__last_sales = Reservation.objects.filter( check_in__month = self.__last_month ).filter( check_in__year = self.__last_year )
-        self.__hotels = Hotels.objects.all()
+        self.__this_sales = ReservationManage.get_reserv_in_range(self.__this_month, self.__this_year)
+        self.__last_sales = ReservationManage.get_reserv_in_range(self.__last_month, self.__last_year)
+        self.__hotels = HotelManage.get_all_hotel()
         self.__label = self.__get_label()
         self.__datapoints_1 = self.__get_datapoint()
         self.__this_total = self.__get_this_total()
@@ -105,21 +174,25 @@ class SaleReport(models.Model):
     def __get_this_rate(self):
         this_count = 0
         this_rate_sum = 0
+        this_rate = 0
         for sale in self.__this_sales:
             if( sale.rating ):
                 this_rate_sum += sale.rating
                 this_count += 1
-        this_rate = this_rate_sum / this_count
+        if this_count:
+            this_rate = this_rate_sum / this_count
         return this_rate
 
     def __get_last_rate(self):
         last_count = 0
         last_rate_sum = 0
+        last_rate = 0
         for sale in self.__last_sales:
             if( sale.rating ):
                 last_rate_sum += sale.rating
                 last_count += 1
-        last_rate = last_rate_sum / last_count
+        if last_count:
+            last_rate = last_rate_sum / last_count
         return last_rate
 
 
@@ -133,7 +206,7 @@ class SaleReport(models.Model):
         datapoints_1 = []
         for hotel in self.__hotels:
             data = {}
-            sum_location = Reservation.objects.filter( room__hotel__location = hotel.location )
+            sum_location = ReservationManage.get_reserv_by_location( hotel.location )
             sum  = 0
             for item in sum_location:
                 sum += item.room.price
