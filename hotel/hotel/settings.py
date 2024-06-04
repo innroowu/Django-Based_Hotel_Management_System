@@ -123,3 +123,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'management', 'static'),
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://26b3-118-232-108-58.ngrok-free.app']
