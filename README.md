@@ -35,7 +35,7 @@ Hotel_Management_System\hotel
     └─ create_booking: Used to create booking database
 ```
 
-## Setup
+## Here is the setup on web application (You can find setup on mobile web browser at the bottom) 
 1. Clone the repository
    
 2. Install Django
@@ -71,7 +71,7 @@ Hotel_Management_System\hotel
 + DATABASES in <setting.py> must also direct to the correct db.sqlite3 file
     
     
-## How to use ngrok to expose local servers to the internet 
+## Setup on mobile web browser: How to use ngrok to expose local servers to the internet
 + First, make sure you've installed ngrok.
 
 + Then, run server in your terminal.
