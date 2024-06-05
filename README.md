@@ -69,3 +69,44 @@ Hotel_Management_System\hotel
 + Make sure the 'STATIC_URL' in <setting.py> points to the valid directory containing your static files, such as images, CSS stylesheets, JavaScript files, etc.
 
 + DATABASES in <setting.py> must also direct to the correct db.sqlite3 file
+    
+    
+## How to use ngrok to expose local servers to the internet 
++ First, make sure you've installed ngrok.
+
++ Then, run server in your terminal.
+   ```
+    python manage.py runserver
+    ```
+   
++ At the same time, run ngrok through this command.
+   ```
+    ngrok http 8000
+    ```
+   
++ You need to copy the link after forwarding. 
+   ```
+   # For example, "https://6b51-118-232-108-58.ngrok-free.app" in this case
+   ngrok                                                           (Ctrl+C to quit)
+                                                                                
+   New guides https://ngrok.com/docs/guides/site-to-site-apis/                     
+                                                                                
+   Session Status             online                                            
+   Account                       Tsaiiiii (Plan: Free)                             
+   Version                        3.10.0                                            
+   Region                         Japan (jp)                                        
+   Latency                        46ms                                              
+   Web Interface               http://127.0.0.1:4040                             
+   Forwarding                   https://6b51-118-232-108-58.ngrok-free.app -> http
+
+   Connections                 ttl     opn     rt1     rt5     p50     p90       
+                                1       0       0.00    0.00    90.39   90.39
+    ```
+   
++ Next, you need to paste this link in settings.py file.
+   ```
+   # You need to paste your unique link since ngrok will randomly generate links.
+   CSRF_TRUSTED_ORIGINS = ['https://6b51-118-232-108-58.ngrok-free.app']
+   ```
+   
++ Finally, you can access this website through this link. You can try to use it with your mobile devices. 
