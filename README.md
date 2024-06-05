@@ -2,17 +2,39 @@
 This repository is a project of Object-Oriented course using Python and Django
 
 ## Feature
-+ User / staff login 
-+ User signup
-+ Add hotel / location
++ User / staff login or signup
 + Edit / view hotels
-+ Search
++ Add hotel / location
++ Search 
 + Hotel reservation
 + Delete / view reservation detail
-+ Extra facilities
-+ User / staff chat
 + Customer reviews
-  
++ Extra facilities
++ User / staff contact system
++ Sales historical analysis
+
+## File Organization
+```
+Hotel_Management_System\hotel
+    ├─ hotel/
+       ├─ asgi: ASGI config for hotel project
+       ├─ settings: Django settings for hotel project
+       ├─ urls: hotel URL Configuration
+       └─ wsgi: WSGI config for hotel project.
+    ├─ management/
+       ├─ migration: all the migration files inside here
+       ├─ static: icon and bootstrap
+       ├─ templatetags: 
+       ├─ admin: ASGI config for hotel project
+       ├─ apps: django apps config
+       ├─ models: Our models class
+       ├─ tests: nothing
+       └─ views: receives requests and returns responses
+    ├─ templates/..: The html files of our entire system are in this folder
+    ├─ manage: Just follow the instructions below to execute this file
+    └─ create_booking: Used to create booking database
+```
+
 ## Setup
 1. Clone the repository
    
