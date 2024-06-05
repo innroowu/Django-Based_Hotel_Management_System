@@ -110,3 +110,4 @@ Hotel_Management_System\hotel
    ```
    
 + Finally, you can access this website through this link. You can try to use it with your mobile devices. 
+!!!Landscape mode will have a better experience
